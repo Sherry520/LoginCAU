@@ -1,2 +1,2 @@
 # LoginCAU
-A python script for login CAU network in linux.
+A python script for login CAU network in Linux.
