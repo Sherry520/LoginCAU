@@ -32,5 +32,5 @@ python .\LoginCAU.py
 
     Answer: This happened only when you use the script first time in a net logged machine. You have to log out by handled only once.
 # License
-The program package is released under the GNU Lesser General Public License version 3.0
-(LGPLv3). See the `LICENSE` file for the complete LGPL license text.
+The program package is released under the GNU GENERAL PUBLIC LICENSE version 3.0
+(GPLv3). See the `LICENSE` file for the complete GPL license text.
