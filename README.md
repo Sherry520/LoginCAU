@@ -25,12 +25,12 @@ python .\LoginCAU.py
 ```
 ## Log in/out
 ```bash
-> you have already logged in, do you want to log out?(y[es]/n[o], default no):
+> You have already logged in, do you want to log out? (y[es]/n[o], default no):
 ```
 # Question
-1. Logout failed! You have to logout by your browser.
+1. Logout failed! You have to logout using your browser.
 
-    Answer: This happened only when you use the script first time in a net logged machine. You have to log out by handled only once.
+    Answer: This only happens the first time you use this script on a networked device. You have to log out once.
 # License
 The program package is released under the GNU GENERAL PUBLIC LICENSE version 3.0
 (GPLv3). See the `LICENSE` file for the complete GPL license text.
