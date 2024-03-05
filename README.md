@@ -1,4 +1,7 @@
-withA *Python* script for login **Campus Gateway** of China Agricultural University in Linux.
+# LoginCAU
+
+# Introduction
+A *Python* script for login **Campus Gateway** of China Agricultural University in Linux.
 
 Some highlight features:
 - Convenience: Login information is stored locally. You don't need to type it every time.
