@@ -1,6 +1,4 @@
 # LoginCAU
-![GitHub License](https://img.shields.io/github/license/Sherry520/LoginCAU)
-![GitHub Repo stars](https://img.shields.io/github/stars/Sherry520/LoginCAU)
 
 # Introduction
 A *Python* script for login **Campus Gateway** of China Agricultural University in Linux.
