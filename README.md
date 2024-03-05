@@ -2,6 +2,7 @@
 
 # Introduction
 A *Python* script for login **Campus Gateway** of China Agricultural University in Linux.
+
 Some highlight features:
 - Convenience: Login information is stored locally. You don't need to type it every time.
 - Secure: Password is not cleartext.
@@ -13,6 +14,7 @@ Python2 : this script supports ***Python2*** only.
 python2 -m pip install requests
 ```
 # Usage
+## Run
 ```Pyhton
 python .\LoginCAU.py
 ```
