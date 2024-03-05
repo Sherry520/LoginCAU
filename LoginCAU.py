@@ -16,20 +16,22 @@ import time
 # from io import open
 
 # Following codes are copied from network
+
+
 class AuthCode(object):
- 
+
     @classmethod
     def encode(cls, string, key, expiry=0):
         return cls._auth_code(string, 'ENCODE', key, expiry)
- 
+
     @classmethod
     def decode(cls, string, key, expiry=0):
         return cls._auth_code(string, 'DECODE', key, expiry)
- 
+
     @staticmethod
     def _md5(source_string):
         return hashlib.md5(source_string).hexdigest()
- 
+
     @classmethod
     def _auth_code(cls, input_string, operation='DECODE', key='', expiry=3600):
         rand_key_length = 4
@@ -69,7 +71,8 @@ class AuthCode(object):
             tmp = box[a]
             box[a] = box[j]
             box[j] = tmp
-            result += chr(ord(handled_string[i]) ^ (box[(box[a]+box[j]) % 256]))
+            result += chr(ord(handled_string[i])
+                          ^ (box[(box[a]+box[j]) % 256]))
         if operation == 'DECODE':
             if (int(result[:10]) == 0 or (int(result[:10]) - time.time() > 0)) and \
                     (result[10:26] == cls._md5(result[26:] + key_b)[:16]):
@@ -83,22 +86,13 @@ class AuthCode(object):
 
 def getLoginUrl():
     # 地址跳转
-    conn = httplib.HTTPConnection("www.msftconnecttest.com")
-    conn.request('GET', '/redirect', headers={
-                 "Host": "www.msftconnecttest.com", "User-Agent": "MMLE", "Accept": "text/plain"})
-    res = conn.getresponse()
-    # 获取跳转地址
-    target = res.getheader("location")
-    domain = re.findall(ur'^(?:https?:\/\/)?([^\/]+)', target)
-    if res.status == 302:
-        if domain[0] == 'go.microsoft.com':
-            conn.close()
+    netRes = testNet()
+    if netRes['code'] == 302:
+        if netRes['domain'] == 'go.microsoft.com':
             return 'logged'
         else:
-            conn.close()
-            return target
+            return netRes['target']
     else:
-        conn.close()
         return 'error'
 
 
@@ -126,7 +120,7 @@ def getPWD():
         return os.getcwdu()+'/'
 
 
-def checkPassFile(LoginURL,flag=1):
+def checkPassFile(LoginURL, flag=1):
     data = {}
     data1 = {}
     py_path = getPWD()
@@ -168,34 +162,58 @@ def checkPassFile(LoginURL,flag=1):
         f.close()
     return data
 
-def netLogIn(LoginURL, logName, logPass):
-    # 登录参数，除了用户名和密码之外的参数，不用全写上，不然可能有问题
-    params = "/drcom/login?callback=dr1003&DDDDD="+logName + "&upass="+logPass+"&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip="
-    # print LoginURL[7:]
-    # return 0
-    url = urljoin(LoginURL, params)
-    res = requests.get(url)
-    res.close()
- 
-    # 测试是否已经登陆
+
+def testNet():
+    data = {}
     conn = httplib.HTTPConnection("www.msftconnecttest.com")
-    conn.request('GET', '/redirect', headers={"Host": "www.msftconnecttest.com", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36", "Accept": "text/plain"})
+    conn.request('GET', '/redirect', headers={
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "Accept-Encoding": "gzip, deflate",
+        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+        # "Connection": "keep-alive",
+        "Host": "www.msftconnecttest.com",
+                # "Upgrade-Insecure-Requests": "1",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    })
     res = conn.getresponse()
     target = res.getheader("location")
     domain = re.findall(ur'^(?:https?:\/\/)?([^\/]+)', target)
+    code = res.status
+    conn.close()
+    data = {'code': code, 'target': target, 'domain': domain[0]}
+    return data
+
+
+def netLogIn(LoginURL, logName, logPass):
+    # 登录参数，除了用户名和密码之外的参数，不用全写上，不然可能有问题[可能还不准确]
+    # wifi登录网关的账号后边还有@cau；lan连接的网关没用；
+    params1 = "/drcom/login?callback=dr1003&DDDDD="+logName + \
+        "%40cau&upass="+logPass+"&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip="
+    params2 = "/drcom/login?callback=dr1003&DDDDD="+logName + \
+        "&upass="+logPass+"&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip="
+    # print LoginURL[7:]
+    # return 0
+    url1 = urljoin(LoginURL, params1)
+    url2 = urljoin(LoginURL, params2)
+    res1 = requests.get(url1)
+    # 测试网络
+    netRes = testNet()
+    # 两个链接一个登录成功就行
+    if netRes['code'] == 302 and netRes['domain'] == LoginURL[7:]:
+        res2 = requests.get(url2)
+        netRes = testNet()
     # 因为是用跳转链接测试，正常情况下，它永远返回302
-    if res.status == 302:
-        conn.close()
+    if netRes['code'] == 302:
         # 跳到微软，已经在登录状态
-        if domain[0] == 'go.microsoft.com':
-            conn.close()
+        if netRes['domain'] == 'go.microsoft.com':
             print "login success"
         # 要跳到登录页
-        elif domain[0] == LoginURL[7:]:
+        elif netRes['domain'] == LoginURL[7:]:
             # 保存的信息不对。因为在netLogIn()运行之前，已经强制获取了ID和Pass信息
-            tmp = raw_input("ID or Password error or you don't have enough flow,do you want to correct your ID and Password?(y/n):")
+            tmp = raw_input(
+                "ID or Password error or you don't have enough flow,do you want to correct your ID and Password?(y/n):")
             if tmp.lower() == 'yes' or tmp.lower() == 'y':
-                data1 = checkPassFile(LoginURL,0)
+                data1 = checkPassFile(LoginURL, 0)
                 netLogIn(LoginURL, data1['ID'], data1['Pass'])
         else:
             print "sorry ,bye bye"
@@ -212,16 +230,16 @@ def netLogOut(LoginURL):
 
 if __name__ == '__main__':
     displayAuthor()
-    LoginURL = getLoginUrl()
-    data = checkPassFile(LoginURL,1)
-    if LoginURL == 'logged':
+    loginurl = getLoginUrl()
+    data = checkPassFile(loginurl, 1)
+    if loginurl == 'logged':
         # 检测到已经登陆，是否要退出？
         tmp = raw_input(
-                "you have already logged in, do you want to log out?(y[es]/n[o], default no):")
+            "you have already logged in, do you want to log out?(y[es]/n[o], default no):")
         if tmp.lower() == 'yes' or tmp.lower() == 'y':
             try:
                 netLogOut(data['Url'])
-            except Exception ,e:
+            except Exception, e:
                 print "Logout failed! You have to logout by your browser."
                 py_path = getPWD()
                 # 提取信息
@@ -235,6 +253,6 @@ if __name__ == '__main__':
                 f.close()
                 fin()
     elif data['ID'] != '' and data['Pass'] != '':
-        netLogIn(LoginURL, data['ID'], data['Pass'])
+        netLogIn(loginurl, data['ID'], data['Pass'])
     else:
         print "network error"

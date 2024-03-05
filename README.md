@@ -6,7 +6,7 @@ A *Python* script for login **Campus Gateway** of China Agricultural University 
 Some highlight features:
 - Convenience: Login information is stored locally. You don't need to type it every time.
 - Secure: Password is not cleartext.
-- Automated: The login address is automatically obtained.
+- Automated: The login address is automatically obtained for WLAN or LAN.
 
 # Prerequisites
 Python2 : this script supports ***Python2*** only.
