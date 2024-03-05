@@ -7,7 +7,7 @@ Some highlight features:
 - Secure: Password is not cleartext.
 - Automated: The login address is automatically obtained.
 
-# Pre Require
+# Prerequisites
 Python2 : this script supports ***Python2*** only.
 ```Pyhton
 python2 -m pip install requests
