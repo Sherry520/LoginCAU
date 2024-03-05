@@ -10,12 +10,12 @@ Some highlight features:
 
 # Prerequisites
 Python2 : this script supports ***Python2*** only.
-```Pyhton
+```python
 python2 -m pip install requests
 ```
 # Usage
 ## Run
-```Pyhton
+```python
 python .\LoginCAU.py
 ```
 ## Input your account ID and Password

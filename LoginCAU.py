@@ -235,12 +235,12 @@ if __name__ == '__main__':
     if loginurl == 'logged':
         # 检测到已经登陆，是否要退出？
         tmp = raw_input(
-            "you have already logged in, do you want to log out?(y[es]/n[o], default no):")
+            "You have already logged in, do you want to log out? (y[es]/n[o], default no):")
         if tmp.lower() == 'yes' or tmp.lower() == 'y':
             try:
                 netLogOut(data['Url'])
             except Exception, e:
-                print "Logout failed! You have to logout by your browser."
+                print "Logout failed! You have to logout using your browser."
                 py_path = getPWD()
                 # 提取信息
                 f = open(py_path+'data.pkl', 'r')
