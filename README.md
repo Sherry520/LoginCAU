@@ -27,8 +27,13 @@ python2 .\LoginCAU.py
 ```bash
 > You have already logged in, do you want to log out? (y[es]/n[o], default no):
 ```
-## Data
+## **Data**
 In LoginCAU.py's directory, user information is stored in the ***data.pkl*** file, which contains the login ID and encrypted password.
+
+To further enhance security, you can modify the file permissions so that only you have read and write permissions:
+```bash
+chmod 600 data.pkl
+```
 # Question
 1. Logout failed! You have to logout using your browser.
 
