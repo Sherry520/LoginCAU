@@ -108,8 +108,8 @@ def displayAuthor():
     print "*Note: This program is only available for Python2                   *"
     print "*Version:V0.1                                                       *"
     print "*Author:Bruce Guo                                                   *"
-    print "*  IF you find any bugs or you have some suggestions, please write  *"
-    print "*a ISSUE in https://github.com/Sherry520/LoginCAU                   *"
+    print "*IF you find any bugs or you have some suggestions, please write    *"
+    print "*an ISSUE in https://github.com/Sherry520/LoginCAU                  *"
     print "*********************************************************************"
 
 
@@ -222,7 +222,7 @@ if __name__ == '__main__':
             try:
                 netLogOut(data['Url'])
             except Exception ,e:
-                print "Logout failed! You have to logout by Chrome in Windows"
+                print "Logout failed! You have to logout by your browser."
                 py_path = getPWD()
                 # 提取信息
                 f = open(py_path+'data.pkl', 'r')
