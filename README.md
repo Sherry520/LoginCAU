@@ -16,7 +16,7 @@ python2 -m pip install requests
 # Usage
 ## Run
 ```python
-python .\LoginCAU.py
+python2 .\LoginCAU.py
 ```
 ## Input your account ID and Password
 ```bash
