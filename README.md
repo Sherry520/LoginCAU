@@ -2,6 +2,7 @@
 
 # 介绍 
 这是一个用于在Linux系统登录“中国农业大学”校园网网关的*Python*脚本；
+
 通俗的讲就是提供联网认证的*Python*脚本。
 
 特点：
@@ -11,6 +12,7 @@
 
 # 使用前提：
 Python2：这个脚本是基于***Python2***写的，并且它只支持***Python2***。
+
 唯一需要安装的模块：
 ```python
 python2 -m pip install requests
@@ -31,6 +33,7 @@ python2 .\LoginCAU.py
 ```
 ## **数据存储**
 在**LoginCAU.py**脚本所在的位置，用户信息存储在一个名为***data.pkl***的文件中，其中保存有账户名和加密后的密码。
+
 **为了更加确保安全，你应该修改这个文件的权限，使得只有你本人可以对这个文件进行“读/写”操作：**
 ```bash
 chmod 600 data.pkl
@@ -38,6 +41,8 @@ chmod 600 data.pkl
 # 问题解答：
 1. Logout failed! You have to logout using your browser.
 
-    回答：当在一个已经联网的设备上，你第一次使用这个脚本去退出登录（即，关闭联网），才会显示这个信息。你需要使用浏览器退出联网，仅此一次。
+   回答：当在一个已经联网的设备上，你第一次使用这个脚本去退出登录（即，关闭联网），才会显示这个信息。
+   
+   你需要使用浏览器退出联网，仅此一次。
 # 许可
 本项目基于GNU GENERAL PUBLIC LICENSE version 3.0(GPLv3)发行。查看`LICENSE`文件阅读完整许可内容。
