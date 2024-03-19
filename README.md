@@ -1,8 +1,7 @@
 # LoginCAU
 
 # 介绍 
-这是一个用于在Linux系统登录“中国农业大学”校园网网关的*Python*脚本；
-
+这是一个用于在Linux系统登录“中国农业大学”校园网网关的*Python*脚本；  
 通俗的讲就是提供联网认证的*Python*脚本。
 
 特点：
@@ -41,8 +40,7 @@ chmod 600 data.pkl
 # 问题解答：
 1. Logout failed! You have to logout using your browser.
 
-   回答：当在一个已经联网的设备上，你第一次使用这个脚本去退出登录（即，关闭联网），才会显示这个信息。
-   
+   回答：当在一个已经联网的设备上，你第一次使用这个脚本去退出登录（即，关闭联网），才会显示这个信息。  
    你需要使用浏览器退出联网，仅此一次。
 # 许可
 本项目基于GNU GENERAL PUBLIC LICENSE version 3.0(GPLv3)发行。查看`LICENSE`文件阅读完整许可内容。
