@@ -10,13 +10,19 @@ Some highlight features:
 
 # Prerequisites
 Python2 : this script supports ***Python2*** only.
-```python
+```bash
+# install pip for python2 if needed
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
+python2 get-pip.py
+# install requests module
 python2 -m pip install requests
 ```
 # Usage
-## Run
-```python
-python2 .\LoginCAU.py
+## Download and Run
+```bash
+git clone https://github.com/Sherry520/LoginCAU.git
+cd LoginCAU
+python2 ./LoginCAU.py
 ```
 ## Input your account ID and Password
 ```bash

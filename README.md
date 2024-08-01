@@ -13,13 +13,19 @@
 Python2：这个脚本是基于***Python2***写的，并且它只支持***Python2***。
 
 唯一需要安装的模块：
-```python
+```bash
+# 安装python2对应的pip【如果需要】
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
+python2 get-pip.py
+# 安装 requests 模块
 python2 -m pip install requests
 ```
 # 使用方法
-## 运行
-```python
-python2 .\LoginCAU.py
+## 下载和使用
+```bash
+git clone https://github.com/Sherry520/LoginCAU.git
+cd LoginCAU
+python2 ./LoginCAU.py
 ```
 ## 第一次使用时，会提示你输入登录网关的账户名和密码
 ```bash
