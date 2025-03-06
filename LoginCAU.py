@@ -26,10 +26,14 @@ def display_author():
     """显示作者信息"""
     print("*********************************************************************")
     print("*                Secure CAU Campus Network Login                   *")
-    print("* Security Features:                                                *")
-    print("*  - Python 3 兼容版本                                              *")
-    print("*  - 使用系统密钥库存储凭据                                         *")
-    print("*  - 密码输入无回显                                                 *")
+    print("* Version: v2.0                                                    *")
+    print("* Author: Bruce Guo                                                *")
+    print("* GitHub: https://github.com/Sherry520/LoginCAU                    *")
+    print("*                                                                  *")
+    print("* 安全特性:                                               *")
+    print("*  - Python 3 兼容版本                                             *")
+    print("*  - 使用系统密钥库存储凭据                                        *")
+    print("*  - 密码输入无回显                                                *")
     print("*********************************************************************")
 
 def get_credentials():
@@ -62,12 +66,9 @@ def secure_request(url, params):
     """发送 HTTP 请求"""
     encoded_params = urllib.parse.urlencode(params)
     full_url = f"{url}?{encoded_params}"
-    print(f"调试: 请求地址: {full_url}")  # 打印完整的请求地址
     
     try:
         response = requests.get(full_url)
-        print(f"调试: 响应状态码: {response.status_code}")  # 打印响应状态码
-        print(f"调试: 响应内容: {response.text}")  # 打印响应内容
         return response.status_code == 200
     except requests.exceptions.RequestException as e:
         print(f"请求失败: {str(e)}")
