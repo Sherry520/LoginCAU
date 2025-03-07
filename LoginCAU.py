@@ -26,6 +26,8 @@ def display_author():
     """显示作者信息"""
     print("*********************************************************************")
     print("*                Secure CAU Campus Network Login                   *")
+    print("* Author: Bruce Guo                                                 *")
+    print("* GitHub: Sherry520/LoginCAU                                        *")
     print("* Security Features:                                                *")
     print("*  - Python 3 兼容版本                                              *")
     print("*  - 使用系统密钥库存储凭据                                         *")
@@ -37,9 +39,9 @@ def get_credentials():
     user_id = keyring.get_password(SERVICE_NAME, "last_user_id")
     
     if user_id:
-        password = keyring.get_password(SERVICE_NAME, user_id)
-        if password:
-            return user_id, password
+       password = keyring.get_password(SERVICE_NAME, user_id)
+       if password:
+           return user_id, password
     
     # 交互式输入
     print("\n首次使用或需要更新凭据：")
@@ -75,22 +77,22 @@ def secure_request(url, params):
 
 def network_login(login_url, user_id, password):
     """执行登录操作"""
-    # 构造完整的登录URL
-    login_path = "/drcom/login"
-    full_login_url = urllib.parse.urljoin(login_url, login_path)
-    
+    parsed_url = urllib.parse.urlparse(login_url)
+    host = parsed_url.hostname
+
+    # 根据网关动态处理账号后缀
+    ddddd = user_id + "@cau" if host != "10.3.38.8" else user_id
+
+    # 精简后的登录参数（仅保留前四项）
     login_params = {
         "callback": "dr1003",
-        "DDDDD": f"{user_id}@cau",  # 账号需要附加 @cau
-        "upass": password,          # 密码直接使用，URL 编码会自动处理特殊字符
-        "0MKKey": "123456",
-        "R1": "0",
-        "R3": "0",
-        "R6": "0",
-        "para": "00",
-        "v6ip": "",
-        "v": "3124"  # 添加 v 参数
+        "DDDDD": ddddd,
+        "upass": password,
+        "0MKKey": "123456"  # 最后保留的第四个参数
     }
+    
+    login_path = "/drcom/login"
+    full_login_url = urllib.parse.urljoin(login_url, login_path)
     
     if secure_request(full_login_url, login_params):
         print("登录请求已发送，验证状态...")
@@ -118,16 +120,19 @@ def check_login_status():
 
 def network_logout(login_url):
     """执行注销"""
-    # 解析登录URL的协议和主机部分
     parsed_url = urllib.parse.urlparse(login_url)
     base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    host = parsed_url.hostname
+
+    # 根据网关动态选择注销参数
+    callback_value = "dr1002" if host == "10.7.250.8" else "dr1004"
     
-    # 构造注销URL
     logout_url = f"{base_url}/drcom/logout"
     logout_params = {
-        "callback": "dr1004",  # 注销回调函数
-        "v": "3690"           # 注销版本号
+        "callback": callback_value,
+        "v": "3690"
     }
+    
     print(f"正在注销，使用注销地址: {logout_url}?{urllib.parse.urlencode(logout_params)}")
     if secure_request(logout_url, logout_params):
         print("注销成功")
@@ -143,8 +148,7 @@ if __name__ == '__main__':
             print("提示: 您已经登录了！")
             while True:
                 choice = input("是否要注销？(Y/N, 默认 N): ").strip().lower()
-                if choice in ('y', 'yes'):  # 支持 y 和 yes
-                    # 获取上次使用的网关地址
+                if choice in ('y', 'yes'):
                     user_id = keyring.get_password(SERVICE_NAME, "last_user_id")
                     if user_id:
                         login_url = keyring.get_password(SERVICE_NAME, f"{user_id}_url")
@@ -155,7 +159,7 @@ if __name__ == '__main__':
                     else:
                         print("错误: 找不到存储的用户ID")
                     break
-                elif choice in ('n', 'no', ''):  # 支持 n、no 和直接回车
+                elif choice in ('n', 'no', ''):
                     print("未注销，退出程序。")
                     break
                 else:
@@ -164,15 +168,25 @@ if __name__ == '__main__':
         
         # 获取认证网关地址
         login_url = get_login_url()
+        print(f"DEBUG: 获取到的登录URL={login_url}")  # 确保此处有输出
+        print(f"DEBUG: 登录状态检查结果={check_login_status()}")
         if not login_url:
             sys.exit(1)
         
         # 获取账号密码
-        user_id, password = get_credentials()
+        print(f"DEBUG: 登录状态检查结果={check_login_status()}")
+        try:
+            user_id, password = get_credentials()
+            if not user_id or not password:
+                print("错误: 获取凭据失败")
+                sys.exit(1)
+        except Exception as e:
+            print(f"错误: 获取凭据失败，错误信息: {str(e)}")
+            sys.exit(1)
+
         
         # 尝试登录
         if not network_login(login_url, user_id, password):
-            # 如果登录失败，清除存储的凭据并提示重新输入
             print("登录失败，清除存储的凭据...")
             keyring.delete_password(SERVICE_NAME, "last_user_id")
             keyring.delete_password(SERVICE_NAME, user_id)
@@ -188,4 +202,3 @@ if __name__ == '__main__':
         if 'password' in locals():
             del password
         sys.exit(0)
-        
